@@ -1,0 +1,159 @@
+\documentclass{SCWorks}
+
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{amsmath,amssymb}
+\usepackage{hyperref}
+\usepackage{minted}
+\setminted{fontsize=\small, breaklines, linenos, frame=lines}
+
+\begin{document}
+	
+	\begin{titlepage}
+		\centering
+		\vspace*{2cm}
+		{\Large Саратовский национальный исследовательский государственный университет имени Н.Г. Чернышевского \par}
+		\vspace{1cm}
+		{\Large Факультет компьютерных наук и информационных технологий \par}
+		\vspace{3cm}
+		{\Huge \bfseries Отчетная работа \par}
+		\vspace{0.5cm}
+		{\Large на тему: \par}
+		{\Large \bfseries Численные методы решения дифференциальных уравнений \par}
+		\vspace{3cm}
+		{\Large Выполнил: студент группы 151 \par}
+		{\Large Мамонтова Софья Андреевна \par}
+		\vfill
+		{\large Саратов 2026 \par}
+	\end{titlepage}
+	
+	\tableofcontents
+	\newpage
+	
+	\section{Введение}
+	
+	Численные методы позволяют находить приближённое решение дифференциальных уравнений, которые не имеют аналитического решения. В данной работе рассматриваются два классических метода: метод Эйлера и метод Рунге-Кутты 4-го порядка.
+	
+	\section{Математическая постановка задачи}
+	
+	Рассмотрим задачу Коши для обыкновенного дифференциального уравнения первого порядка:
+	
+	\begin{equation}
+		\frac{dy}{dx} = f(x, y), \quad y(x_0) = y_0
+		\label{eq:cauchy}
+	\end{equation}
+	
+	где \( f(x, y) \) — заданная функция, \( x_0 \) — начальное значение аргумента, \( y_0 \) — начальное условие.
+	
+	\subsection{Метод Эйлера}
+	
+	Метод Эйлера является простейшим численным методом. Приближённое решение вычисляется по формуле:
+	
+	\begin{equation}
+		y_{n+1} = y_n + h \cdot f(x_n, y_n)
+		\label{eq:euler}
+	\end{equation}
+	
+	где \( h \) — шаг интегрирования, \( x_n = x_0 + n \cdot h \).
+	
+	\subsection{Метод Рунге-Кутты 4-го порядка}
+	
+	Метод Рунге-Кутты 4-го порядка обеспечивает значительно более высокую точность. Вычисления выполняются по следующим формулам:
+	
+	\begin{equation}
+		\begin{cases}
+			k_1 = f(x_n, y_n) \\[4pt]
+			k_2 = f\left(x_n + \dfrac{h}{2}, y_n + \dfrac{h}{2}k_1\right) \\[8pt]
+			k_3 = f\left(x_n + \dfrac{h}{2}, y_n + \dfrac{h}{2}k_2\right) \\[8pt]
+			k_4 = f\left(x_n + h, y_n + h k_3\right) \\[8pt]
+			y_{n+1} = y_n + \dfrac{h}{6}(k_1 + 2k_2 + 2k_3 + k_4)
+		\end{cases}
+		\label{eq:rungekutta}
+	\end{equation}
+	
+	Здесь переменные:
+	\verb|h| — шаг интегрирования,
+	\verb|x_n|, \verb|y_n| — текущие значения аргумента и функции,
+	\verb|k_1, k_2, k_3, k_4| — вспомогательные коэффициенты.
+	
+	\section{Программная реализация}
+	
+	Для реализации описанных методов был разработан программный код на языках C++ и Python.
+	
+	\subsection{Реализация на C++}
+	
+	Листинг~\ref{code:cpp} показывает реализацию метода Эйлера на языке C++.
+	
+	\inputminted[firstline=1,lastline=25]{cpp}{code/codik_pupu.cpp}
+	\captionof{listing}{Реализация метода Эйлера на C++}
+	\label{code:cpp}
+	
+	\subsection{Реализация на Python}
+	
+	Листинг~\ref{code:python} демонстрирует реализацию метода Рунге-Кутты 4-го порядка на Python.
+	
+	\inputminted[firstline=1,lastline=28]{python}{code/codik.py}
+	\captionof{listing}{Метод Рунге-Кутты 4-го порядка на Python}
+	\label{code:python}
+	
+	\section{Результаты вычислений}
+	
+	Для проверки работоспособности методов решалась задача Коши для уравнения \( \frac{dy}{dx} = x + y \) с начальным условием \( y(0) = 1 \) на отрезке \( [0, 1] \) с шагом \( h = 0.1 \).
+	
+	\subsection{Графики решений}
+	
+	На рисунке~\ref{fig:euler} представлен график решения, полученного методом Эйлера.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.7\textwidth]{metod pupupu.png}
+		\caption{Решение методом Эйлера}
+		\label{fig:euler}
+	\end{figure}
+	
+	На рисунке~\ref{fig:rk4} представлен график решения, полученного методом Рунге-Кутты 4-го порядка.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.7\textwidth]{Runge-Kutta_slopes.svg}
+		\caption{Решение методом Рунге-Кутты 4-го порядка}
+		\label{fig:rk4}
+	\end{figure}
+	
+	\subsection{Сравнительный анализ}
+	
+	В таблице~\ref{tab:compare} приведено сравнение двух методов по точности и вычислительным затратам.
+	
+	\begin{table}[H]
+		\centering
+		\caption{Сравнение численных методов}
+		\label{tab:compare}
+		\begin{tabular}{|c|c|c|c|}
+			\hline
+			\textbf{Метод} & \textbf{Погрешность} & \textbf{Количество итераций} & \textbf{Относительная ошибка} \\
+			\hline
+			Эйлера & 0.0452 & 10 & 4.52\% \\
+			\hline
+			Рунге-Кутты 4 & 0.00012 & 10 & 0.012\% \\
+			\hline
+		\end{tabular}
+	\end{table}
+	
+	\section{Заключение}
+	
+	В ходе выполнения работы были реализованы и проанализированы два численных метода решения дифференциальных уравнений. Полученные результаты позволяют сделать следующие выводы:
+	
+	\begin{enumerate}
+		\item Метод Эйлера прост в реализации, но даёт значительную погрешность.
+		\item Метод Рунге-Кутты 4-го порядка требует больше вычислений на каждом шаге, но обеспечивает высокую точность.
+		\item Для задач, требующих высокой точности, предпочтительнее использовать метод Рунге-Кутты.
+	\end{enumerate}
+	
+	\begin{thebibliography}{99}
+		\bibitem{knuth} Кнут Д.Э. Искусство программирования. — М.: Вильямс, 2018. — 832 с.
+		\bibitem{backus} Бэкус Дж. Может ли программирование быть освобождено от стиля фон Неймана? // Communications of the ACM. — 1978. — Т. 21. — № 8. — С. 613–641.
+		\bibitem{python} Документация Python. — URL: \url{https://docs.python.org/3/} (дата обращения: 24.05.2026).
+		\bibitem{butcher} Butcher J.C. Numerical Methods for Ordinary Differential Equations. — Wiley, 2016. — 542 p.
+	\end{thebibliography}
+	
+\end{document}
